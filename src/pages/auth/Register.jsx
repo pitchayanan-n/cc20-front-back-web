@@ -3,6 +3,7 @@ import FormInput from "../../components/form/FormInput";
 import { createAlert } from "../../utils/createAlert";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Buttons from "../../components/form/Buttons";
 
 // rfce
 function Register() {
@@ -41,13 +42,7 @@ function Register() {
           </div>
 
           <div className="flex justify-center mt-4">
-            <button className="bg-black text-white p-2 rounded-md">
-              {
-                isSubmitting
-                ? '...Loading'
-                : 'Register'
-              }
-            </button>
+            <Buttons label="Register" isSubmitting={isSubmitting} />
           </div>
         </form>
       </div>
