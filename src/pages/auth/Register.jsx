@@ -2,19 +2,26 @@ import React from "react";
 import FormInput from "../../components/form/FormInput";
 import { createAlert } from "../../utils/createAlert";
 import { useForm } from "react-hook-form";
-import axios from 'axios';
+import axios from "axios";
 
 // rfce
 function Register() {
   // JS
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, formState } = useForm();
+  const { isSubmitting } = formState;
 
   const hdlSubmit = async (value) => {
+    await new Promise((resolve)=> setTimeout(resolve, 2000))
+
     try {
-      const res = await axios.post('http://localhost:8000/auth/register', value)
-      console.log(res)
+      const res = await axios.post(
+        "http://localhost:8000/auth/register",
+        value
+      );
+      console.log(res);
+      createAlert("success", res.data.message);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       createAlert("info", error.response?.data?.message);
     }
   };
@@ -35,7 +42,11 @@ function Register() {
 
           <div className="flex justify-center mt-4">
             <button className="bg-black text-white p-2 rounded-md">
-              Register
+              {
+                isSubmitting
+                ? '...Loading'
+                : 'Register'
+              }
             </button>
           </div>
         </form>
