@@ -6,10 +6,14 @@ import Buttons from "../../components/form/Buttons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema, registerSchema } from "../../utils/validator";
 import { actionLogin, actionRegister } from "../../api/auth";
+import useAuthStore from "../../store/auth-store";
 
 // rfce
 function Login() {
   // JS
+  // Zustand
+  const actionLoginWithZustand = useAuthStore((state) => state.actionLoginWithZustand);
+
   const { handleSubmit, register, formState, reset } = useForm({
     resolver: yupResolver(loginSchema),
   });
@@ -17,17 +21,24 @@ function Login() {
   // console.log(errors);
 
   const hdlSubmit = async (value) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    try {
-      const res = await actionLogin(value);
-      console.log(res);
-      createAlert("success", res.data.message);
-      reset()
-    } catch (error) {
-      console.log(error);
-      createAlert("info", error.response?.data?.message);
+    const res = await actionLoginWithZustand(value)
+    if (res.success) {
+      console.log(res.role);
+      createAlert('success', "Welcome back")
+    } else {
+      createAlert('info', res.message)
     }
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // try {
+    //   const res = await actionLoginWithZustand(value);
+    //   console.log(res);
+    //   createAlert("success", res.data.message);
+    //   reset()
+    // } catch (error) {
+    //   console.log(error);
+    //   createAlert("info", error.response?.data?.message);
+    // }
   };
   return (
     <div className="flex w-full h-full justify-end">
